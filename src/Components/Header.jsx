@@ -1,5 +1,6 @@
 import React from 'react';
 import { FiSearch, FiShoppingCart, FiUser } from 'react-icons/fi';
+import Logo from '../assets/Logo1.png'; 
 
 const Header = () => {
   return (
@@ -8,10 +9,10 @@ const Header = () => {
         <nav className="flex flex-col md:flex-row justify-between items-center py-4 gap-4">
           {/* Logo */}
           <div className="flex items-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tighter">
+              <img className='h-12 w-auto cursor-pointer' src={Logo} alt="Logo" />
+               <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tighter cursor-pointer">
               Eshop
-            </h1>
-
+            </h2>
           </div>
 
           {/* Search Bar */}
@@ -36,14 +37,14 @@ const Header = () => {
           {/* Navigation Icons */}
           <div className="flex space-x-6">
             <button 
-              className="text-white hover:text-gray-200 transition-colors relative"
+              className="text-white hover:text-gray-200 transition-colors relative cursor-pointer"
               aria-label="User account"
             >
               <FiUser size={24} />
             </button>
             
             <button 
-              className="text-white hover:text-gray-200 transition-colors relative"
+              className="text-white hover:text-gray-200 transition-colors relative cursor-pointer"
               aria-label="Shopping cart"
             >
               <FiShoppingCart size={24} />
