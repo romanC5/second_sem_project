@@ -5,7 +5,7 @@ import Logo from '../assets/Logo1.png';
 
 const Header = () => {
   return (
-    <header className="bg-gradient-to-r from-red-500 to-red-600 shadow-md">
+    <header className="bg-gradient-to-r from-red-500 to-red-600 shadow-md mb-4">
       <div className="container mx-auto px-4">
         <nav className="flex flex-col md:flex-row justify-between items-center py-4 gap-4">
 

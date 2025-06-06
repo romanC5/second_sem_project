@@ -4,14 +4,17 @@ import './index.css'
 import App from './App.jsx'
 import { store } from './app/store.js';
 import { Provider } from 'react-redux'
+import { BrowserRouter } from 'react-router';
 
 createRoot(document.getElementById('root')).render(
   // StrictMode is used to highlight potential problems in an application.
 
   <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </BrowserRouter>
   </StrictMode>,
 
 )

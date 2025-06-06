@@ -22,7 +22,8 @@ const Home = () => {
 
   return (
     <Wrapper>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="w-full px-4 sm:px-6 lg:px-8 ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
         {data?.products.map((data) => (
           <div key={data?.id} className="w-full bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
             <a href="#">
@@ -68,6 +69,7 @@ const Home = () => {
             </div>
           </div>
         ))}
+      </div>
       </div>
     </Wrapper>
   );
