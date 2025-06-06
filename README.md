@@ -2,8 +2,8 @@
 
 Installation & setup 
 # 1. Clone the repo
-git clone https://github.com/your-username/ecommerce-frontend.git
-cd ecommerce-frontend
+git clone https://github.com/romanC5/second_sem_project.git
+cd second_sem_project
 
 # 2. Install dependencies
 npm install
