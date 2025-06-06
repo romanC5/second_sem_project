@@ -2,18 +2,22 @@ import React from 'react';
 import { FiSearch, FiShoppingCart, FiUser } from 'react-icons/fi';
 import Logo from '../assets/Logo1.png'; 
 
+
 const Header = () => {
   return (
     <header className="bg-gradient-to-r from-red-500 to-red-600 shadow-md">
       <div className="container mx-auto px-4">
         <nav className="flex flex-col md:flex-row justify-between items-center py-4 gap-4">
+
           {/* Logo */}
+          <a href="/">
           <div className="flex items-center">
               <img className='h-12 w-auto cursor-pointer' src={Logo} alt="Logo" />
                <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tighter cursor-pointer">
               Eshop
             </h2>
           </div>
+          </a>
 
           {/* Search Bar */}
           <div className="w-full md:w-1/3">
