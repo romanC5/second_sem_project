@@ -5,6 +5,7 @@ const SingleProduct = () => {
   return (
     <div>
       <Header/>
+      
     </div>
   )
 }

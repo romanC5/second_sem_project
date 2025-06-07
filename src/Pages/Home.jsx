@@ -10,7 +10,9 @@ const Home = () => {
 
   if (isLoading) return (
     <Wrapper>
-      <p>Loading products...</p>
+      <div className='flex items-center justify-center h-100vh w-100vw'>
+      <h1 className='self-center text-8xl'>Loading products...</h1>
+      </div>
     </Wrapper>
   );
 
@@ -22,23 +24,21 @@ const Home = () => {
 
   return (
     <Wrapper>
-      <div className="w-full px-4 sm:px-6 lg:px-8 ">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
+      <div className="w-full px-4 sm:px-6 lg:px-8 h-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {data?.products.map((data) => (
-          <div key={data?.id} className="w-full bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-            <a href="#">
+          <div key={data?.id} className=" h-96 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 " >
+            <a href="#" >
               <img 
-                className="p-8 rounded-t-lg w-full h-48 object-contain" 
+                className="p-1.5 rounded-t-lg w-full h-58 object-contain " 
                 src={data?.thumbnail} 
-                alt={data?.title} 
+                
               />
-            </a>
-            <div className="px-5 pb-5">
-              <a href="#">
-                <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+               <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white pl-5 pt-2">
                   {data?.title}
                 </h5>
-              </a>
+            </a>
+            <div className="px-5 pb-5">
               <div className="flex items-center mt-2.5 mb-5">
                 <div className="flex items-center space-x-1 rtl:space-x-reverse">
                   {[...Array(5)].map((_, i) => (
