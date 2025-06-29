@@ -1,10 +1,13 @@
 import React from 'react';
 import Wrapper from '../Components/Wrapper';
 import { useGetAllProductsQuery } from '../services/dummyApi';
+import { useParams } from 'react-router';
 
 const Home = () => {
+  //  const { cat } = useParams();
+  //   const param = useLocation();
   const { data, error, isLoading } = useGetAllProductsQuery();
-
+   
   console.log("API Data:", data);
   console.log("Error:", error);
 
@@ -25,10 +28,12 @@ const Home = () => {
   return (
     <Wrapper>
       <div className="w-full px-4 sm:px-6 lg:px-8 h-full">
+        
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        
         {data?.products.map((data) => (
           <div key={data?.id} className=" h-96 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 " >
-            <a href="#" >
+            
               <img 
                 className="p-1.5 rounded-t-lg w-full h-58 object-contain " 
                 src={data?.thumbnail} 
@@ -37,7 +42,7 @@ const Home = () => {
                <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white pl-5 pt-2">
                   {data?.title}
                 </h5>
-            </a>
+          
             <div className="px-5 pb-5">
               <div className="flex items-center mt-2.5 mb-5">
                 <div className="flex items-center space-x-1 rtl:space-x-reverse">
@@ -62,9 +67,7 @@ const Home = () => {
                 <span className="text-3xl font-bold text-gray-900 dark:text-white">
                   ${data?.price}
                 </span>
-                <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                  Add to cart
-                </button>
+               
               </div>
             </div>
           </div>

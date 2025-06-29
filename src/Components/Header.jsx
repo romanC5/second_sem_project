@@ -11,10 +11,10 @@ const Header = () => {
 
           {/* Logo */}
           <a href="/">
-          <div className="flex items-center">
+          <div className="flex items-center gap-1 ">
               <img className='h-12 w-auto cursor-pointer' src={Logo} alt="Logo" />
                <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tighter cursor-pointer">
-              Eshop
+              Kinmel
             </h2>
           </div>
           </a>
