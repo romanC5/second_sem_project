@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../Components/Header';
+
 import { useParams } from 'react-router-dom';
 import { useGetProductByIdQuery } from '../services/dummyApi';
 
@@ -27,7 +27,7 @@ const SingleProduct = () => {
 
   return (
     <div>
-      <Header />
+      
 
       <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl mt-16 px-4 mx-auto">
         <div className="max-w-[550px] max-h-[500px] p-4 flex items-center justify-center">

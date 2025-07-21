@@ -1,5 +1,4 @@
 import React from 'react';
-import Wrapper from '../Components/Wrapper';
 import { useGetAllProductsQuery } from '../services/dummyApi';
 import { Link } from 'react-router-dom';
 const Home = () => {
@@ -29,7 +28,7 @@ const Home = () => {
 
 
   return (
-    <Wrapper>
+    
       <div className="w-full px-4 sm:px-6 lg:px-8 h-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {/* map for displaying products from api */}
@@ -79,7 +78,7 @@ const Home = () => {
           ))}
         </div>
       </div>
-    </Wrapper>
+   
   );
 };
 
