@@ -29,7 +29,7 @@ const Home = () => {
 
   return (
     
-      <div className="w-full px-4 sm:px-6 lg:px-8 h-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8 h-full mt-25 ">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {/* map for displaying products from api */}
           {data?.products.map((data) => (

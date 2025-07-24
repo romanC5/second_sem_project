@@ -34,7 +34,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="bg-gradient-to-r from-brand-red to-brand-red-dark shadow-lg mb-4 relative z-50">
+    <header className="bg-gradient-to-r from-brand-red to-brand-red-dark shadow-lg mb-16 fixed z-50 top-0 w-full bg-white">
       <div className="container mx-auto px-4">
         <nav className="flex flex-col md:flex-row justify-between items-center py-4 gap-4">
           
@@ -130,7 +130,7 @@ const Header = () => {
               <FiUser size={24} />
             </button>
             
-            <button 
+            <Link to="/cart" 
               className="text-primary-foreground hover:text-primary-glow transition-colors duration-300 relative cursor-pointer p-2"
               aria-label="Shopping cart"
             >
@@ -138,7 +138,7 @@ const Header = () => {
               <span className="absolute -top-1 -right-1 bg-primary-foreground text-primary rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
                 0
               </span>
-            </button>
+            </Link>
           </div>
         </nav>
       </div>
