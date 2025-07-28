@@ -36,7 +36,7 @@ const Header = () => {
   return (
     <header className="bg-gradient-to-r from-brand-red to-brand-red-dark shadow-lg mb-16 fixed z-50 top-0 w-full bg-white">
       <div className="container mx-auto px-4">
-        <nav className="flex flex-col md:flex-row justify-between items-center py-4 gap-4">
+        <nav className="flex justify-between items-center py-4 gap-4">
           
           {/* Logo */}
           <a href="/" className="flex-shrink-0">

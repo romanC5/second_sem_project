@@ -5,7 +5,7 @@ const Wrapper = (props) => {
   return (
     <>
       <Header/>
-      {props.children}
+     <div style={{ paddingTop: '100px' }}>{props.children}</div>
       <Footer/>
     </>
   )

@@ -2,8 +2,11 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { FaArrowLeft } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { useState } from 'react';
+
 
 const Cart_1 = () => {
+    const [count, setCount] = useState(0);
     return (
         <>
             <div className=' mt-22 max-w-[1200px]  mx-auto '>
@@ -15,6 +18,7 @@ const Cart_1 = () => {
                     </h2>
                     <button className=' py-1 px-4 flex items-center cursor-pointer border-2 border-black rounded-md '><RiDeleteBinLine size={18} />Clear Cart</button>
                 </div>
+            
 
 
                 <div className='flex flex-col gap-4 p-4 border-[1.8px] border-black rounded-md'>
@@ -26,10 +30,17 @@ const Cart_1 = () => {
                                 <p className='text-gray-600'>Price: $100</p>
                                 <p>Category</p>
                             </div>
+
+                        </div>
+                        <div className='flex items-center gap-5 '>
+                            <button className='text-3xl font-bold' onClick={() => setCount(count - 1)}>-</button>
+                            <span className='text-3xl font-bold'>{count}</span>
+                            <button className='text-3xl font-bold' onClick={() => setCount(count + 1)}>+</button>
                         </div>
                         <button className='text-red-500 cursor-pointer'><RiDeleteBinLine size={24} /></button>
                     </div>
                     {/* Repeat above block for more products */}
+
                 </div>
             </div>
         </>

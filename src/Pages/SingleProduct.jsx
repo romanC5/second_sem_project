@@ -29,13 +29,15 @@ const SingleProduct = () => {
   //   : '';
   return (
 
-     <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl mt-16 px-4 mx-auto">
-        <div className="max-w-[650px] max-h-[500px] p-4 flex items-center justify-center">
-          <img
-            src={data?.images[0]}
-            alt="Product"
-            className="object-contain w-full h-full"
-          />
+     <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl px-4 mx-auto pt-8">
+        <div className="flex justify-center items-center ">
+          <div className="w-full md:w-[450px] aspect-[4/3] bg-white shadow-md rounded-lg">
+            <img
+              src={data?.thumbnail}
+              alt="Product"
+              className='w-full h-full object-contain'
+              />
+              </div>
         </div>
 
 
