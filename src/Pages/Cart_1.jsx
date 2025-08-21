@@ -7,6 +7,7 @@ import { useState } from 'react';
 
 const Cart_1 = () => {
     const [count, setCount] = useState(0);
+    
     return (
         <>
             <div className=' mt-22 max-w-[1200px]  mx-auto '>
