@@ -4,7 +4,6 @@ import "./App.css";
 import Home from "./Pages/Home";
 import SingleProduct from "./Pages/SingleProduct";
 import Wrapper from "./Components/Wrapper";
-
 import Cart_1 from "./Pages/Cart_1";
 
 function App() {

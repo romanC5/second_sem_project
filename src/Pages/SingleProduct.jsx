@@ -1,12 +1,13 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetProductByIdQuery } from '../services/dummyApi';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../app/cartSlice';
 
 const SingleProduct = () => {
   const { id } = useParams();
   const { data, error, isLoading } = useGetProductByIdQuery(id);
-
-  console.log("Single Product Data:", data);
+  const dispatch = useDispatch();
 
   if (isLoading) {
     return (
@@ -24,22 +25,21 @@ const SingleProduct = () => {
     );
   }
 
-  // const imageUrl = data?.thumbnail
-  //   ? `${data.thumbnail}?width=600&height=400`
-  //   : '';
+  const handleAddToCart = () => {
+    dispatch(addToCart(data));
+  };
+
   return (
-
-     <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl px-4 mx-auto pt-8">
-        <div className="flex justify-center items-center ">
-          <div className="w-full md:w-[450px] aspect-[4/3] bg-white shadow-md rounded-lg">
-            <img
-              src={data?.thumbnail}
-              alt="Product"
-              className='w-full h-full object-contain'
-              />
-              </div>
+    <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl px-4 mx-auto pt-8">
+      <div className="flex justify-center items-center ">
+        <div className="w-full md:w-[450px] aspect-[4/3] bg-white shadow-md rounded-lg">
+          <img
+            src={data?.thumbnail}
+            alt="Product"
+            className='w-full h-full object-contain'
+          />
         </div>
-
+      </div>
 
       <div className="flex flex-col justify-center items-start">
         <h1 className="text-3xl font-bold">{data?.title}</h1>
@@ -71,13 +71,12 @@ const SingleProduct = () => {
           <button className="bg-blue-500 text-white px-6 py-3 rounded cursor-pointer">
             Buy Now
           </button>
-          <button className="bg-blue-500 text-white px-6 py-3 rounded cursor-pointer">
+          <button className="bg-blue-500 text-white px-6 py-3 rounded cursor-pointer" onClick={handleAddToCart}>
             Add to Cart
           </button>
         </div>
       </div>
     </div>
-
   );
 };
 
