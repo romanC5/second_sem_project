@@ -7,6 +7,7 @@ import Wrapper from "./Components/Wrapper";
 import Cart_1 from "./Pages/Cart_1";
 import Checkout from "./Pages/Checkout";
 import Login_Signup from "./Pages/Login_Signup";
+import Account from "./Pages/account";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/cart" element={<Cart_1/>} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/login_Signup" element={<Login_Signup />} />
+          <Route path="/account" element={<Account />} />
         </Routes>
       </Wrapper>
     </>

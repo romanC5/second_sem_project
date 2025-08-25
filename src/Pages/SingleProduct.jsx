@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useGetProductByIdQuery } from '../services/dummyApi';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../app/cartSlice';
@@ -9,6 +9,7 @@ const SingleProduct = () => {
   const { id } = useParams();
   const { data, error, isLoading } = useGetProductByIdQuery(id);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   // Animation refs (must be before any return)
   const buyNowRef = useRef(null);
   const addToCartRef = useRef(null);
@@ -49,8 +50,13 @@ const SingleProduct = () => {
   };
 
   const handleBuyNow = () => {
-    animateButton(buyNowRef);
-    // Add your buy now logic here
+    console.log('Buy Now clicked');
+    animateButton(buyNowRef, () => {
+      console.log('Animation done, dispatching addToCart');
+      dispatch(addToCart(data));
+      console.log('Navigating to /checkout');
+      navigate('/checkout');
+    });
   };
 
   return (

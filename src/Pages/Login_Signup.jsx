@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 const Login_Signup = () => {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [form, setForm] = useState({
     userOrEmail: '',
@@ -60,6 +61,11 @@ const Login_Signup = () => {
               .then(user => {
                 console.log('User info:', user);
                 setUserInfo(user);
+                localStorage.setItem('userInfo', JSON.stringify(user));
+                // Notify other tabs/components
+                window.dispatchEvent(new Event('userInfoChanged'));
+                // Redirect to home after login
+                navigate('/');
               });
           } else {
             setError(data.message || 'Login failed.');
@@ -124,17 +130,9 @@ const Login_Signup = () => {
           )}
           {error && <div className="text-red-500 text-sm text-center">{error}</div>}
           {success && <div className="text-green-600 text-sm text-center">{success}</div>}
-          {/* {userInfo && (
-            <div className="bg-green-50 border border-green-200 rounded p-4 mt-4 text-green-900 text-sm">
-              <div className="font-bold mb-1">Logged in as:</div>
-              <div>Username: {userInfo.username}</div>
-              <div>Email: {userInfo.email}</div>
-              <div>Name: {userInfo.firstName} {userInfo.lastName}</div>
-            </div>
-          )} */}
           <button
             type="submit"
-            className="w-full py-3 hover:bg-brand-red-dark font-bold rounded-lg text-2xl duration-200 shadow-md cursor-pointer"
+            className="w-full py-3 bg-black font-bold text-white rounded-lg text-xl duration-200 shadow-md cursor-pointer font-Geist Fallback"
           >
             {isLogin ? 'Login' : 'Sign Up'}
           </button>

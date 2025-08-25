@@ -47,7 +47,7 @@ const Checkout = () => {
             </div>
             <button
               onClick={handlePlaceOrder}
-              className="w-full py-3 bg-brand-red hover:bg-brand-red-dark font-bold rounded-lg text-lg transition-colors duration-200 shadow-md"
+              className="w-full py-3 bg-black text-white font-bold rounded-lg text-xl shadow-md"
             >
               Place Order
             </button>

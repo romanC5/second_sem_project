@@ -1,14 +1,34 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
- 
-import { Link } from 'react-router-dom'; 
+import { Link, useNavigate, useLocation } from 'react-router-dom'; 
 import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX } from 'react-icons/fi';
 import Logo from '../assets/Logo1.png';
 import { useSearchProductsQuery } from '../services/dummyApi';
 
 const Header = () => {
+  const [userInfo, setUserInfo] = useState(null);
+
+  // Always sync userInfo from localStorage on mount, on storage event, and on custom userInfoChanged event
+  useEffect(() => {
+    const syncUserInfo = () => {
+      try {
+        const userStr = localStorage.getItem('userInfo');
+        if (userStr) setUserInfo(JSON.parse(userStr));
+        else setUserInfo(null);
+      } catch { setUserInfo(null); }
+    };
+    syncUserInfo(); // On mount
+    window.addEventListener('storage', syncUserInfo);
+    window.addEventListener('userInfoChanged', syncUserInfo);
+    return () => {
+      window.removeEventListener('storage', syncUserInfo);
+      window.removeEventListener('userInfoChanged', syncUserInfo);
+    };
+  }, []);
   const [searchTerm, setSearchTerm] = useState('');
   const [showResults, setShowResults] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
  const cartItems = useSelector((state) => state.cart.cartItems);
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -19,9 +39,25 @@ const Header = () => {
     skip: !searchTerm, 
   });
 
+
+  // Update searchTerm from URL if on Home page and ?q= is present
+  React.useEffect(() => {
+    if (location.pathname === '/' && location.search.includes('q=')) {
+      const params = new URLSearchParams(location.search);
+      setSearchTerm(params.get('q') || '');
+    }
+  }, [location]);
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     setShowResults(true);
+  };
+
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Enter' && searchTerm.trim()) {
+      navigate(`/?q=${encodeURIComponent(searchTerm.trim())}`);
+      setShowResults(false);
+    }
   };
 
   const toggleMobileMenu = () => {
@@ -51,6 +87,12 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []); // Empty dependency array ensures this runs only once
 
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('userInfo');
+    window.location.reload();
+  };
+
   return (
     <header className="bg-gradient-to-r from-brand-red to-brand-red-dark shadow-lg fixed z-50 top-0 w-full bg-white">
       <div className="container mx-auto px-4">
@@ -69,17 +111,31 @@ const Header = () => {
           {/* Search Bar (Visible on all screen sizes) */}
           <div ref={searchRef} className="relative flex-1 max-w-2xl mx-2 md:mx-4">
             <div className="relative">
-              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={20} />
               <input
                 type="text"
                 placeholder="Search for products..."
                 value={searchTerm}
                 onChange={handleSearch}
                 onFocus={() => setShowResults(true)}
-                className="w-full pl-10 pr-4 py-3 bg-search-bg border border-search-border rounded-lg 
+                onKeyDown={handleSearchKeyDown}
+                className="w-full pr-10 pl-4 py-3 bg-search-bg border border-search-border rounded-lg 
                            focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
                            text-foreground placeholder-muted-foreground transition-all duration-300"
               />
+              <button
+                type="button"
+                onClick={() => {
+                  if (searchTerm.trim()) {
+                    navigate(`/?q=${encodeURIComponent(searchTerm.trim())}`);
+                    setShowResults(false);
+                  }
+                }}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground focus:outline-none cursor-pointer"
+                tabIndex={-1}
+                aria-label="Search"
+              >
+                <FiSearch size={20} />
+              </button>
             </div>
 
             {/* Search Results Dropdown */}
@@ -120,10 +176,20 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation Icons (Hidden on mobile) */}
-          <div className="hidden md:flex items-center space-x-6 flex-shrink-0">
-            <Link to="/login_Signup" className="text-primary-foreground hover:text-primary-glow transition-colors duration-300 p-2">
-              <FiUser size={24} />
-            </Link>
+          <div className="hidden md:flex items-center space-x-3 flex-shrink-0 gap-5">
+            {userInfo && userInfo.image ? (
+              <Link to="/account" className="p-0 m-0">
+                <img
+                  src={userInfo.image}
+                  alt="Account"
+                  className="w-8 h-8 rounded-full object-cover border-2 border-primary-foreground cursor-pointer"
+                />
+              </Link>
+            ) : (
+              <Link to="/login_Signup" className="text-primary-foreground hover:text-primary-glow transition-colors duration-300 p-2">
+                <FiUser size={24} />
+              </Link>
+            )}
             <Link to="/cart" className="text-primary-foreground hover:text-primary-glow transition-colors duration-300 relative p-2">
               <FiShoppingCart size={24} />
               <span className="absolute -top-1 -right-1 bg-primary-foreground text-primary rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
