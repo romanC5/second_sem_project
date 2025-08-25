@@ -46,7 +46,7 @@ const Cart_1 = () => {
                     ) : (
                         cartItems.map((item) => (
                             <div key={item.id} className='flex items-center justify-between pb-2 border-b last:border-b-0'>
-                                <div className='flex items-center gap-4'>
+                                <div className='flex items-center gap-4 w-65'>
                                     <img src={item.thumbnail || item.image || "https://cdn.dummyjson.com/product-images/laptops/asus-zenbook-pro-dual-screen-laptop/thumbnail.webp"} alt={item.title} className='w-20 h-20 object-cover' />
                                     <div>
                                         <h3 className='text-lg font-semibold'>{item.title}</h3>
@@ -54,10 +54,10 @@ const Cart_1 = () => {
                                         <p>{item.category}</p>
                                     </div>
                                 </div>
-                                <div className='flex items-center gap-5'>
-                                    <button className='text-3xl font-bold' onClick={() => handleDecrement(item.id)} disabled={item.quantity <= 1}>-</button>
+                                <div className='flex items-center justify-around gap-5 w-40'>
+                                    <button className='text-4xl font-bold cursor-pointer' onClick={() => handleDecrement(item.id)} disabled={item.quantity <= 1}>-</button>
                                     <span className='text-3xl font-bold'>{item.quantity}</span>
-                                    <button className='text-3xl font-bold' onClick={() => handleIncrement(item.id)}>+</button>
+                                    <button className='text-4xl font-bold cursor-pointer' onClick={() => handleIncrement(item.id)}>+</button>
                                 </div>
                                 <button className='text-red-500 cursor-pointer' onClick={() => handleRemove(item.id)}><RiDeleteBinLine size={24} /></button>
                             </div>
@@ -66,9 +66,19 @@ const Cart_1 = () => {
                 </div>
 
                 {cartItems.length > 0 && (
-                    <div className='flex justify-end mt-4'>
-                        <div className='text-xl font-semibold'>Total: ${totalPrice.toFixed(2)}</div>
-                    </div>
+                    <>
+                        <div className='flex justify-end mt-4'>
+                            <div className='text-xl font-semibold'>Total: ${totalPrice.toFixed(2)}</div>
+                        </div>
+                        <div className='flex justify-end mt-4'>
+                            <Link
+                                to="/checkout"
+                                className="bg-brand-red hover:bg-brand-red-dark font-bold py-3 px-8 rounded-lg text-lg transition-colors duration-200 shadow-md"
+                            >
+                                Proceed to Checkout
+                            </Link>
+                        </div>
+                    </>
                 )}
             </div>
         </>

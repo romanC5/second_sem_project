@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+ 
 import { Link } from 'react-router-dom'; 
 import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX } from 'react-icons/fi';
 import Logo from '../assets/Logo1.png';
@@ -8,7 +10,8 @@ const Header = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showResults, setShowResults] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+ const cartItems = useSelector((state) => state.cart.cartItems);
+  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const searchRef = useRef(null);
   const mobileMenuRef = useRef(null);
   
@@ -118,13 +121,13 @@ const Header = () => {
 
           {/* Desktop Navigation Icons (Hidden on mobile) */}
           <div className="hidden md:flex items-center space-x-6 flex-shrink-0">
-            <Link to="/account" className="text-primary-foreground hover:text-primary-glow transition-colors duration-300 p-2">
+            <Link to="/login_Signup" className="text-primary-foreground hover:text-primary-glow transition-colors duration-300 p-2">
               <FiUser size={24} />
             </Link>
             <Link to="/cart" className="text-primary-foreground hover:text-primary-glow transition-colors duration-300 relative p-2">
               <FiShoppingCart size={24} />
               <span className="absolute -top-1 -right-1 bg-primary-foreground text-primary rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
-                0
+                {cartCount}
               </span>
             </Link>
           </div>

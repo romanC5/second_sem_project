@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetProductByIdQuery } from '../services/dummyApi';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../app/cartSlice';
-
+import { ring } from 'ldrs'
+ring.register()
 const SingleProduct = () => {
   const { id } = useParams();
   const { data, error, isLoading } = useGetProductByIdQuery(id);
   const dispatch = useDispatch();
+  // Animation refs (must be before any return)
+  const buyNowRef = useRef(null);
+  const addToCartRef = useRef(null);
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <h1 className="text-4xl">Loading product...</h1>
+         <l-ring
+          size="40"
+          stroke="5"
+          bg-opacity="0"
+          speed="2"
+          color="black"
+        ></l-ring>
       </div>
     );
   }
@@ -20,18 +30,32 @@ const SingleProduct = () => {
   if (error || !data) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <h1 className="text-2xl text-red-600">Error fetching product</h1>
+        <h1 className="text-2xl text-red-600">Error</h1>
       </div>
     );
   }
 
+  const animateButton = (ref, callback) => {
+    if (!ref.current) return;
+    ref.current.classList.add('zoom-out');
+    setTimeout(() => {
+      ref.current.classList.remove('zoom-out');
+      if (callback) callback();
+    }, 200);
+  };
+
   const handleAddToCart = () => {
-    dispatch(addToCart(data));
+    animateButton(addToCartRef, () => dispatch(addToCart(data)));
+  };
+
+  const handleBuyNow = () => {
+    animateButton(buyNowRef);
+    // Add your buy now logic here
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl px-4 mx-auto pt-8">
-      <div className="flex justify-center items-center ">
+    <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl px-4 pt-8 mx-auto">
+      <div className="">
         <div className="w-full md:w-[450px] aspect-[4/3] bg-white shadow-md rounded-lg">
           <img
             src={data?.thumbnail}
@@ -41,7 +65,7 @@ const SingleProduct = () => {
         </div>
       </div>
 
-      <div className="flex flex-col justify-center items-start">
+      <div className="">
         <h1 className="text-3xl font-bold">{data?.title}</h1>
         <p className="text-lg mt-2">{data?.description}</p>
 
@@ -68,10 +92,18 @@ const SingleProduct = () => {
         <span className="text-xl font-semibold mt-2">${data?.price}</span>
 
         <div className="flex gap-4 mt-4">
-          <button className="bg-blue-500 text-white px-6 py-3 rounded cursor-pointer">
+          <button
+            ref={buyNowRef}
+            className="bg-blue-500 text-white px-6 py-3 rounded cursor-pointer transition-transform duration-200"
+            onClick={handleBuyNow}
+          >
             Buy Now
           </button>
-          <button className="bg-blue-500 text-white px-6 py-3 rounded cursor-pointer" onClick={handleAddToCart}>
+          <button
+            ref={addToCartRef}
+            className="bg-blue-500 text-white px-6 py-3 rounded cursor-pointer transition-transform duration-200"
+            onClick={handleAddToCart}
+          >
             Add to Cart
           </button>
         </div>
