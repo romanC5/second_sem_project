@@ -148,7 +148,7 @@ const Header = () => {
         {mobileMenuOpen && (
           <div ref={mobileMenuRef} className="md:hidden bg-white border-t border-border">
             <div className="flex flex-col px-4 py-3 space-y-3">
-              <Link to="/account" onClick={handleProductClick} className="flex items-center gap-3 p-2 rounded-md hover:bg-accent">
+              <Link to="/login_Signup" onClick={handleProductClick} className="flex items-center gap-3 p-2 rounded-md hover:bg-accent">
                 <FiUser size={22} className="text-muted-foreground" />
                 <span className="font-medium">My Account</span>
               </Link>
