@@ -13,6 +13,12 @@ export const dummyApi = createApi({
     searchProducts: builder.query({
       query: (q) => `products/search?q=${encodeURIComponent(q)}`,
     }),
+    getCategories: builder.query({
+      query: () => 'products/categories',
+    }),
+    getProductsByCategory: builder.query({
+      query: (category) => `products/category/${encodeURIComponent(category)}`,
+    }),
   }),
 });
 
@@ -20,4 +26,6 @@ export const {
   useGetAllProductsQuery,
   useGetProductByIdQuery,
   useSearchProductsQuery,
+  useGetCategoriesQuery,
+  useGetProductsByCategoryQuery,
 } = dummyApi;

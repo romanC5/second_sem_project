@@ -1,5 +1,5 @@
-import React from 'react';
-import { useGetAllProductsQuery, useSearchProductsQuery } from '../services/dummyApi';
+import React, { useState } from 'react';
+import { useGetAllProductsQuery, useSearchProductsQuery, useGetCategoriesQuery, useGetProductsByCategoryQuery } from '../services/dummyApi';
 import { Link, useLocation } from 'react-router-dom';
 import { ring } from 'ldrs';
 ring.register();
@@ -10,13 +10,18 @@ const Home = () => {
   const params = new URLSearchParams(location.search);
   const searchTerm = params.get('q') || '';
 
+  // Category state
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const { data: categories, isLoading: catLoading, error: catError } = useGetCategoriesQuery();
+  const { data: categoryData, isLoading: catProdLoading, error: catProdError } = useGetProductsByCategoryQuery(selectedCategory, { skip: selectedCategory === 'all' });
+
   // All products
   const { data: allData, error: allError, isLoading: allLoading } = useGetAllProductsQuery();
   // Search products
   const { data: searchData, error: searchError, isLoading: searchLoading } = useSearchProductsQuery(searchTerm, { skip: !searchTerm });
 
   // Show loading spinner if loading
-  if ((searchTerm && searchLoading) || (!searchTerm && allLoading)) {
+  if (catLoading || (selectedCategory !== 'all' && catProdLoading) || (searchTerm && searchLoading) || (!searchTerm && selectedCategory === 'all' && allLoading)) {
     return (
       <div className="flex items-center justify-center h-screen">
         <l-ring
@@ -31,7 +36,7 @@ const Home = () => {
   }
 
   // Show error if error
-  if ((searchTerm && searchError) || (!searchTerm && allError)) {
+  if (catError || (selectedCategory !== 'all' && catProdError) || (searchTerm && searchError) || (!searchTerm && selectedCategory === 'all' && allError)) {
     return (
       <div className="flex items-center justify-center h-screen">
         <h1 className="text-2xl text-red-600">404</h1>
@@ -40,11 +45,35 @@ const Home = () => {
   }
 
   // Decide which products to show
-  const products = searchTerm ? searchData?.products : allData?.products;
+  let products = [];
+  if (searchTerm) {
+    products = searchData?.products;
+  } else if (selectedCategory !== 'all') {
+    products = categoryData?.products;
+  } else {
+    products = allData?.products;
+  }
 
   return (
-    <div className="w-full px-4 sm:px-6 lg:px-8 h-full">
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="w-full px-2 sm:px-4 lg:px-8 h-full">
+      {/* Category Dropdown */}
+      <div className="w-full mb-4">
+        <select
+          className="w-full max-w-xs px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-black"
+          value={selectedCategory}
+          onChange={e => setSelectedCategory(e.target.value)}
+        >
+          <option value="all">All</option>
+          {Array.isArray(categories) && categories.map((cat) => {
+            const label = cat.name ? cat.name : String(cat);
+            const value = cat.slug ? cat.slug : String(cat);
+            return (
+              <option value={value} key={value}>{label}</option>
+            );
+          })}
+        </select>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
         {products && products.length > 0 ? (
           products.map((data) => (
             <Link to={`/product/${data?.id}`} key={data?.id}>
