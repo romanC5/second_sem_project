@@ -12,7 +12,7 @@ const About = () => {
         <div className="mb-6">
           <h2 className="text-xl font-semibold mb-2 text-brand-red">Our Mission</h2>
           <p className="text-gray-600">
-            To empower shoppers with a seamless, trustworthy, and delightful e-commerce journey. We strive to connect you with top brands and trending products, while ensuring a safe and user-friendly environment.
+           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Incidunt delectus expedita consequatur aperiam odio. Beatae, perspiciatis veniam. Animi ratione amet qui nemo veritatis! Consequuntur unde repellendus deleniti nam saepe consectetur?
           </p>
         </div>
         <div className="mb-6">
