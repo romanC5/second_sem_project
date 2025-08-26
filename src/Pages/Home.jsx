@@ -55,7 +55,7 @@ const Home = () => {
   }
 
   return (
-    <div className="w-full px-2 sm:px-4 lg:px-8 h-full">
+  <div className="w-full px-1 sm:px-3 lg:px-8 h-full">
       {/* Category Dropdown */}
       <div className="w-full mb-4">
         <select
@@ -73,25 +73,26 @@ const Home = () => {
           })}
         </select>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+  <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
         {products && products.length > 0 ? (
           products.map((data) => (
             <Link to={`/product/${data?.id}`} key={data?.id}>
-              <div className="h-96 border border-gray-200 rounded-lg shadow-sm">
+              <div className="border border-gray-200 rounded-lg shadow-sm bg-white flex flex-col h-48 xs:h-56 sm:h-64 md:h-96">
                 <img
-                  className="p-1.5 rounded-t-lg w-full h-58 object-contain"
+                  className="p-1.5 rounded-t-lg w-full h-24 xs:h-28 sm:h-32 md:h-58 object-contain mx-auto"
                   src={data?.thumbnail}
+                  alt={data?.title}
                 />
-                <h5 className="text-xl font-semibold tracking-tight text-black-900 dark:text-black pl-5 pt-2">
+                <h5 className="text-xs xs:text-sm sm:text-base md:text-xl font-semibold tracking-tight text-black-900 dark:text-black px-2 pt-1 md:pl-5 md:pt-2 truncate">
                   {data?.title}
                 </h5>
-                <div className="px-5 pb-5">
-                  <div className="flex items-center mt-2.5 mb-5">
-                    <div className="flex items-center space-x-1 rtl:space-x-reverse">
+                <div className="px-2 pb-2 md:px-5 md:pb-5 flex flex-col flex-1 justify-end">
+                  <div className="flex items-center mt-1 mb-2 md:mt-2.5 md:mb-5">
+                    <div className="flex items-center space-x-0.5 md:space-x-1">
                       {[...Array(5)].map((_, i) => (
                         <svg
                           key={i}
-                          className="w-4 h-4"
+                          className="w-3 h-3 xs:w-4 xs:h-4 md:w-4 md:h-4"
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 22 20"
@@ -103,12 +104,12 @@ const Home = () => {
                         </svg>
                       ))}
                     </div>
-                    <span className="bg-blue-100 text-black-800 text-xs font-semibold px-2.5 py-0.5 rounded-sm dark:bg-blue-200 dark:text-black-800 ms-3">
+                    <span className="bg-blue-100 text-black-800 text-xs font-semibold px-1.5 py-0.5 md:px-2.5 md:py-0.5 rounded-sm ms-2 md:ms-3">
                       {data?.rating.toFixed(1)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-3xl font-bold">
+                    <span className="text-lg xs:text-xl md:text-3xl font-bold">
                       ${data?.price}
                     </span>
                   </div>

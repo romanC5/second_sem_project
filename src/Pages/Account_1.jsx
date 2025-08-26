@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const Account = () => {
-  const [user, setUser] = useState(null);
+const Account_1 = () => {
+     const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,7 +34,6 @@ const Account = () => {
       </div>
     );
   }
-
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] bg-gray-50 py-10 px-2">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 flex flex-col items-center">
@@ -56,7 +54,7 @@ const Account = () => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Account;
+export default Account_1

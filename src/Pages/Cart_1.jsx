@@ -30,7 +30,7 @@ const Cart_1 = () => {
 
     return (
         <>
-            <div className='mt-22 max-w-[1200px] mx-auto'>
+            <div className='mt-22 max-w-[1200px] mx-auto h-[80vh]'>
                 <Link to="/" className='flex gap-1.5 items-center'><FaArrowLeft size={18} /> <span className='font-bold text-2xl'>Shopping Cart</span></Link>
 
                 <div className='flex between items-center justify-between p-4'>
