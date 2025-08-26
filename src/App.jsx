@@ -9,6 +9,7 @@ import Checkout from "./Pages/Checkout";
 import Login_Signup from "./Pages/Login_Signup";
 import Contact from "./Pages/Contact";
 import Account_1 from "./Pages/Account_1";
+import About from "./Pages/About";
 function App() {
   return (
     <>
@@ -21,6 +22,7 @@ function App() {
           <Route path="/login_Signup" element={<Login_Signup />} />
           <Route path="/account" element={<Account_1 />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </Wrapper>
     </>
