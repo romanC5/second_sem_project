@@ -1,25 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearCart } from '../app/cartSlice';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
-  const user = useSelector((state) => state.auth.user); // 👈 adjust according to your auth slice
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user) {
-      // Redirect to login_Signup if not logged in
-      navigate('/login_Signup', { replace: true });
-    }
-  }, [user, navigate]);
-
-  if (!user) {
-    // Don’t render checkout while redirecting
-    return null;
-  }
 
   const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
