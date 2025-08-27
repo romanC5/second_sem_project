@@ -19,8 +19,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<SingleProduct />} />
           <Route path="/cart" element={<Cart_1 />} />
-          
-          {/* Protected checkout route */}
+
+          {/* Protected checkout */}
           <Route
             path="/checkout"
             element={
@@ -31,8 +31,8 @@ function App() {
           />
 
           <Route path="/login_Signup" element={<Login_Signup />} />
-          
-          {/* You can also protect account page if needed */}
+
+          {/* Optional: protect account page */}
           <Route
             path="/account"
             element={
