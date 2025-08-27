@@ -5,19 +5,19 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
-  const user = useSelector((state) => state.auth.user); // 👈 change according to your auth state
+  const user = useSelector((state) => state.auth.user); // 👈 adjust according to your auth slice
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) {
-      // If not logged in, redirect to login page
-      navigate('/login');
+      // Redirect to login_Signup if not logged in
+      navigate('/login_Signup', { replace: true });
     }
   }, [user, navigate]);
 
   if (!user) {
-    // Show nothing while redirecting
+    // Don’t render checkout while redirecting
     return null;
   }
 
