@@ -12,7 +12,9 @@ const Checkout = () => {
 
   const handlePlaceOrder = () => {
     dispatch(clearCart());
-    alert('Order placed successfully!');
+    
+   alert('Please login first to proceed checkout!');
+    navigate('/login_Signup', { replace: true }); 
   };
 
   return (
