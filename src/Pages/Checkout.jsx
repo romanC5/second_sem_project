@@ -1,20 +1,31 @@
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearCart } from '../app/cartSlice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
+  const user = useSelector((state) => state.auth.user); // 👈 change according to your auth state
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      // If not logged in, redirect to login page
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
+  if (!user) {
+    // Show nothing while redirecting
+    return null;
+  }
 
   const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handlePlaceOrder = () => {
     dispatch(clearCart());
-    
-   alert('Please login first to proceed checkout!');
-    navigate('/login_Signup', { replace: true }); 
+    alert('Order placed successfully!');
   };
 
   return (
@@ -32,13 +43,19 @@ const Checkout = () => {
               {cartItems.map((item) => (
                 <div key={item.id} className="flex items-center justify-between py-4">
                   <div className="flex items-center gap-4">
-                    <img src={item.thumbnail || item.image || 'https://cdn.dummyjson.com/product-images/laptops/asus-zenbook-pro-dual-screen-laptop/thumbnail.webp'} alt={item.title} className="w-16 h-16 object-cover rounded-md border" />
+                    <img 
+                      src={item.thumbnail || item.image || 'https://cdn.dummyjson.com/product-images/laptops/asus-zenbook-pro-dual-screen-laptop/thumbnail.webp'} 
+                      alt={item.title} 
+                      className="w-16 h-16 object-cover rounded-md border" 
+                    />
                     <div>
                       <h3 className="font-semibold text-lg">{item.title}</h3>
                       <p className="text-gray-500 text-sm">Qty: {item.quantity}</p>
                     </div>
                   </div>
-                  <div className="font-semibold text-lg">${(item.price * item.quantity).toFixed(2)}</div>
+                  <div className="font-semibold text-lg">
+                    ${(item.price * item.quantity).toFixed(2)}
+                  </div>
                 </div>
               ))}
             </div>
