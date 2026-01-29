@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useGetAllProductsQuery, useSearchProductsQuery, useGetCategoriesQuery, useGetProductsByCategoryQuery } from '../services/dummyApi';
+import { useGetAllProductsQuery, useSearchProductsQuery } from '../services/dummyApi';
 import { Link, useLocation } from 'react-router-dom';
 import { ring } from 'ldrs';
 ring.register();
@@ -11,17 +11,31 @@ const Home = () => {
   const searchTerm = params.get('q') || '';
 
   // Category state
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const { data: categories, isLoading: catLoading, error: catError } = useGetCategoriesQuery();
-  const { data: categoryData, isLoading: catProdLoading, error: catProdError } = useGetProductsByCategoryQuery(selectedCategory, { skip: selectedCategory === 'all' });
+  const [selectedCategory, setSelectedCategory] = useState('');
 
-  // All products
-  const { data: allData, error: allError, isLoading: allLoading } = useGetAllProductsQuery();
-  // Search products
-  const { data: searchData, error: searchError, isLoading: searchLoading } = useSearchProductsQuery(searchTerm, { skip: !searchTerm });
+  // Build query params
+  const queryParams = {};
+  if (selectedCategory) queryParams.category = selectedCategory;
+  if (searchTerm) queryParams.search = searchTerm;
+
+  // Fetch products with filters
+  const { data: productsData, error, isLoading } = useGetAllProductsQuery(queryParams);
+
+  // Available categories (hardcoded from backend enum)
+  const categories = [
+    'Electronics',
+    'Fashion',
+    'Home & Living',
+    'Sports',
+    'Books',
+    'Food',
+    'Health',
+    'Toys',
+    'Other'
+  ];
 
   // Show loading spinner if loading
-  if (catLoading || (selectedCategory !== 'all' && catProdLoading) || (searchTerm && searchLoading) || (!searchTerm && selectedCategory === 'all' && allLoading)) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <l-ring
@@ -36,23 +50,16 @@ const Home = () => {
   }
 
   // Show error if error
-  if (catError || (selectedCategory !== 'all' && catProdError) || (searchTerm && searchError) || (!searchTerm && selectedCategory === 'all' && allError)) {
+  if (error) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <h1 className="text-2xl text-red-600">404</h1>
+        <h1 className="text-2xl text-red-600">Error loading products</h1>
       </div>
     );
   }
 
-  // Decide which products to show
-  let products = [];
-  if (searchTerm) {
-    products = searchData?.products;
-  } else if (selectedCategory !== 'all') {
-    products = categoryData?.products;
-  } else {
-    products = allData?.products;
-  }
+  // Get products from API response
+  const products = productsData?.data || [];
 
   return (
   <div className="w-full px-1 sm:px-3 lg:px-8 h-full">
@@ -63,28 +70,24 @@ const Home = () => {
           value={selectedCategory}
           onChange={e => setSelectedCategory(e.target.value)}
         >
-          <option value="all">All</option>
-          {Array.isArray(categories) && categories.map((cat) => {
-            const label = cat.name ? cat.name : String(cat);
-            const value = cat.slug ? cat.slug : String(cat);
-            return (
-              <option value={value} key={value}>{label}</option>
-            );
-          })}
+          <option value="">All Categories</option>
+          {categories.map((cat) => (
+            <option value={cat} key={cat}>{cat}</option>
+          ))}
         </select>
       </div>
   <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
         {products && products.length > 0 ? (
-          products.map((data) => (
-            <Link to={`/product/${data?.id}`} key={data?.id}>
+          products.map((product) => (
+            <Link to={`/product/${product?._id}`} key={product?._id}>
               <div className="border border-gray-200 rounded-lg shadow-sm bg-white flex flex-col h-48 xs:h-56 sm:h-64 md:h-96">
                 <img
                   className="p-1.5 rounded-t-lg w-full h-24 xs:h-28 sm:h-32 md:h-58 object-contain mx-auto"
-                  src={data?.thumbnail}
-                  alt={data?.title}
+                  src={product?.images?.[0] || 'https://via.placeholder.com/300'}
+                  alt={product?.name}
                 />
                 <h5 className="text-xs xs:text-sm sm:text-base md:text-xl font-semibold tracking-tight text-black-900 dark:text-black px-2 pt-1 md:pl-5 md:pt-2 truncate">
-                  {data?.title}
+                  {product?.name}
                 </h5>
                 <div className="px-2 pb-2 md:px-5 md:pb-5 flex flex-col flex-1 justify-end">
                   <div className="flex items-center mt-1 mb-2 md:mt-2.5 md:mb-5">
@@ -96,7 +99,7 @@ const Home = () => {
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 22 20"
-                          fill={i < Math.round(data?.rating) ? '#FACC15' : 'none'}
+                          fill={i < Math.round(product?.rating || 0) ? '#FACC15' : 'none'}
                           stroke="#FACC15"
                           strokeWidth="1.5"
                         >
@@ -105,13 +108,18 @@ const Home = () => {
                       ))}
                     </div>
                     <span className="bg-blue-100 text-black-800 text-xs font-semibold px-1.5 py-0.5 md:px-2.5 md:py-0.5 rounded-sm ms-2 md:ms-3">
-                      {data?.rating.toFixed(1)}
+                      {(product?.rating || 0).toFixed(1)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-lg xs:text-xl md:text-3xl font-bold">
-                      ${data?.price}
+                      ${product?.discountPrice || product?.price}
                     </span>
+                    {product?.discountPrice && (
+                      <span className="text-sm text-gray-500 line-through ml-2">
+                        ${product?.price}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
