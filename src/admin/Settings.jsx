@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { Save, Store, Bell, Lock, CreditCard } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const Settings = () => {
-  const [activeTab, setActiveTab] = useState('store');
   const [storeSettings, setStoreSettings] = useState({
     storeName: 'Kinmel Store',
     email: 'contact@kinmel.com',
@@ -19,13 +26,6 @@ const Settings = () => {
     marketingEmails: false
   });
 
-  const tabs = [
-    { id: 'store', label: 'Store Details', icon: Store },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'security', label: 'Security', icon: Lock },
-    { id: 'payments', label: 'Payments', icon: CreditCard },
-  ];
-
   const handleSaveStore = (e) => {
     e.preventDefault();
     alert('Store settings saved successfully!');
@@ -33,181 +33,140 @@ const Settings = () => {
 
   return (
     <div className="space-y-6">
-      {/* Tabs */}
-      <div className="bg-white rounded-xl shadow-sm">
-        <div className="border-b border-gray-200">
-          <nav className="flex overflow-x-auto">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-                  activeTab === tab.id
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <tab.icon size={18} />
-                {tab.label}
-              </button>
-            ))}
-          </nav>
-        </div>
+      <Tabs defaultValue="store" className="space-y-6">
+        <Card>
+          <CardContent className="p-1">
+            <TabsList className="w-full justify-start h-auto p-1 gap-1">
+              <TabsTrigger value="store" className="gap-2 px-4 py-2">
+                <Store className="h-4 w-4" /> Store Details
+              </TabsTrigger>
+              <TabsTrigger value="notifications" className="gap-2 px-4 py-2">
+                <Bell className="h-4 w-4" /> Notifications
+              </TabsTrigger>
+              <TabsTrigger value="security" className="gap-2 px-4 py-2">
+                <Lock className="h-4 w-4" /> Security
+              </TabsTrigger>
+              <TabsTrigger value="payments" className="gap-2 px-4 py-2">
+                <CreditCard className="h-4 w-4" /> Payments
+              </TabsTrigger>
+            </TabsList>
+          </CardContent>
+        </Card>
 
-        <div className="p-6">
-          {/* Store Details Tab */}
-          {activeTab === 'store' && (
-            <form onSubmit={handleSaveStore} className="space-y-6 max-w-2xl">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Store Name</label>
-                  <input
-                    type="text"
-                    value={storeSettings.storeName}
-                    onChange={(e) => setStoreSettings({ ...storeSettings, storeName: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
+        {/* Store Details Tab */}
+        <TabsContent value="store">
+          <Card>
+            <CardContent className="pt-6">
+              <form onSubmit={handleSaveStore} className="max-w-2xl space-y-6">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="storeName">Store Name</Label>
+                    <Input id="storeName" value={storeSettings.storeName} onChange={(e) => setStoreSettings({ ...storeSettings, storeName: e.target.value })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" type="email" value={storeSettings.email} onChange={(e) => setStoreSettings({ ...storeSettings, email: e.target.value })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Phone</Label>
+                    <Input id="phone" type="tel" value={storeSettings.phone} onChange={(e) => setStoreSettings({ ...storeSettings, phone: e.target.value })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="address">Address</Label>
+                    <Input id="address" value={storeSettings.address} onChange={(e) => setStoreSettings({ ...storeSettings, address: e.target.value })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Currency</Label>
+                    <Select value={storeSettings.currency} onValueChange={(val) => setStoreSettings({ ...storeSettings, currency: val })}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="NPR">NPR - Nepalese Rupee</SelectItem>
+                        <SelectItem value="USD">USD - US Dollar</SelectItem>
+                        <SelectItem value="INR">INR - Indian Rupee</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="taxRate">Tax Rate (%)</Label>
+                    <Input id="taxRate" type="number" value={storeSettings.taxRate} onChange={(e) => setStoreSettings({ ...storeSettings, taxRate: e.target.value })} />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input
-                    type="email"
-                    value={storeSettings.email}
-                    onChange={(e) => setStoreSettings({ ...storeSettings, email: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                  <input
-                    type="tel"
-                    value={storeSettings.phone}
-                    onChange={(e) => setStoreSettings({ ...storeSettings, phone: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                  <input
-                    type="text"
-                    value={storeSettings.address}
-                    onChange={(e) => setStoreSettings({ ...storeSettings, address: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Currency</label>
-                  <select
-                    value={storeSettings.currency}
-                    onChange={(e) => setStoreSettings({ ...storeSettings, currency: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="NPR">NPR - Nepalese Rupee</option>
-                    <option value="USD">USD - US Dollar</option>
-                    <option value="INR">INR - Indian Rupee</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Tax Rate (%)</label>
-                  <input
-                    type="number"
-                    value={storeSettings.taxRate}
-                    onChange={(e) => setStoreSettings({ ...storeSettings, taxRate: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </div>
-              <button
-                type="submit"
-                className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                <Save size={18} />
-                Save Changes
-              </button>
-            </form>
-          )}
+                <Button type="submit" className="gap-2">
+                  <Save className="h-4 w-4" /> Save Changes
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-          {/* Notifications Tab */}
-          {activeTab === 'notifications' && (
-            <div className="space-y-6 max-w-2xl">
-              <div className="space-y-4">
+        {/* Notifications Tab */}
+        <TabsContent value="notifications">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="max-w-2xl space-y-4">
                 {Object.entries(notificationSettings).map(([key, value]) => (
-                  <div key={key} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                      </p>
-                      <p className="text-sm text-gray-500">Receive notifications for {key.toLowerCase()}</p>
+                  <div key={key} className="flex items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <p className="font-medium">{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</p>
+                      <p className="text-sm text-muted-foreground">Receive notifications for {key.toLowerCase()}</p>
                     </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={value}
-                        onChange={() => setNotificationSettings({ ...notificationSettings, [key]: !value })}
-                        className="sr-only peer"
-                      />
-                      <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                    </label>
+                    <Switch checked={value} onCheckedChange={(checked) => setNotificationSettings({ ...notificationSettings, [key]: checked })} />
                   </div>
                 ))}
               </div>
-            </div>
-          )}
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-          {/* Security Tab */}
-          {activeTab === 'security' && (
-            <div className="space-y-6 max-w-2xl">
-              <div className="p-4 bg-gray-50 rounded-lg">
-                <h3 className="font-medium text-gray-900 mb-4">Change Password</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
-                    <input type="password" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+        {/* Security Tab */}
+        <TabsContent value="security">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="max-w-2xl space-y-6">
+                <div className="rounded-lg border p-4">
+                  <h3 className="mb-4 font-medium">Change Password</h3>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="currentPassword">Current Password</Label>
+                      <Input id="currentPassword" type="password" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="newPassword">New Password</Label>
+                      <Input id="newPassword" type="password" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                      <Input id="confirmPassword" type="password" />
+                    </div>
+                    <Button>Update Password</Button>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-                    <input type="password" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
-                    <input type="password" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
-                  </div>
-                  <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                    Update Password
-                  </button>
                 </div>
               </div>
-            </div>
-          )}
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-          {/* Payments Tab */}
-          {activeTab === 'payments' && (
-            <div className="space-y-6 max-w-2xl">
-              <div className="p-4 bg-gray-50 rounded-lg">
-                <h3 className="font-medium text-gray-900 mb-4">Payment Methods</h3>
-                <div className="space-y-3">
-                  <label className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 cursor-pointer">
-                    <input type="checkbox" defaultChecked className="w-4 h-4 text-blue-600 rounded" />
-                    <span>Cash on Delivery</span>
-                  </label>
-                  <label className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 cursor-pointer">
-                    <input type="checkbox" defaultChecked className="w-4 h-4 text-blue-600 rounded" />
-                    <span>eSewa</span>
-                  </label>
-                  <label className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 cursor-pointer">
-                    <input type="checkbox" className="w-4 h-4 text-blue-600 rounded" />
-                    <span>Khalti</span>
-                  </label>
-                  <label className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 cursor-pointer">
-                    <input type="checkbox" className="w-4 h-4 text-blue-600 rounded" />
-                    <span>Bank Transfer</span>
-                  </label>
+        {/* Payments Tab */}
+        <TabsContent value="payments">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="max-w-2xl space-y-6">
+                <div className="rounded-lg border p-4">
+                  <h3 className="mb-4 font-medium">Payment Methods</h3>
+                  <div className="space-y-3">
+                    {['Cash on Delivery', 'eSewa', 'Khalti', 'Bank Transfer'].map((method, i) => (
+                      <label key={method} className="flex items-center gap-3 rounded-lg border p-3 cursor-pointer hover:bg-accent/50 transition-colors">
+                        <Checkbox defaultChecked={i < 2} />
+                        <span className="text-sm font-medium">{method}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
-      </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

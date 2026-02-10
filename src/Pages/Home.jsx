@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useGetAllProductsQuery, useSearchProductsQuery } from '../services/dummyApi';
 import { Link, useLocation } from 'react-router-dom';
 import { ring } from 'ldrs';
+import { getImageUrl } from '@/lib/utils';
 ring.register();
 
 const Home = () => {
@@ -83,7 +84,7 @@ const Home = () => {
               <div className="border border-gray-200 rounded-lg shadow-sm bg-white flex flex-col h-48 xs:h-56 sm:h-64 md:h-96">
                 <img
                   className="p-1.5 rounded-t-lg w-full h-24 xs:h-28 sm:h-32 md:h-58 object-contain mx-auto"
-                  src={product?.images?.[0] || 'https://via.placeholder.com/300'}
+                  src={getImageUrl(product?.images?.[0])}
                   alt={product?.name}
                 />
                 <h5 className="text-xs xs:text-sm sm:text-base md:text-xl font-semibold tracking-tight text-black-900 dark:text-black px-2 pt-1 md:pl-5 md:pt-2 truncate">

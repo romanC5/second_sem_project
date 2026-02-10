@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useLoginMutation, useRegisterMutation } from '../services/dummyApi';
 
 const Login_Signup = () => {
   const navigate = useNavigate();
+
   const [isLogin, setIsLogin] = useState(true);
   const [form, setForm] = useState({
     name: '',
@@ -17,6 +18,15 @@ const Login_Signup = () => {
 
   const [login, { isLoading: isLoggingIn }] = useLoginMutation();
   const [register, { isLoading: isRegistering }] = useRegisterMutation();
+
+  // If already logged in, redirect to appropriate page
+  const token = localStorage.getItem('token');
+  const userInfo = JSON.parse(localStorage.getItem('userInfo') || 'null');
+  if (token && userInfo) {
+    if (userInfo.role === 'superadmin') return <Navigate to="/superadmin" replace />;
+    if (userInfo.role === 'shopkeeper') return <Navigate to="/admin" replace />;
+    return <Navigate to="/" replace />;
+  }
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -47,16 +57,18 @@ const Login_Signup = () => {
           localStorage.setItem('token', result.data.token);
           localStorage.setItem('userInfo', JSON.stringify(result.data.user));
           
+          // Notify Header and other components about login
+          window.dispatchEvent(new Event('userInfoChanged'));
+          
           // Redirect based on role
           setTimeout(() => {
             if (result.data.user.role === 'superadmin') {
-              navigate('/superadmin');
+              navigate('/superadmin', { replace: true });
             } else if (result.data.user.role === 'shopkeeper') {
-              navigate('/admin');
+              navigate('/admin', { replace: true });
             } else {
-              navigate('/');
+              navigate('/', { replace: true });
             }
-            window.location.reload();
           }, 500);
         }
       } catch (err) {
@@ -101,9 +113,9 @@ const Login_Signup = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center bg-gray-50 py-10 px-2">
+    <div className="min-h-[80vh] flex items-center justify-center py-10 px-2">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-        <h1 className="text-3xl font-bold mb-6 text-center text-brand-red">
+        <h1 className="text-3xl font-bold mb-6 text-center text-brand-black">
           {isLogin ? 'Login' : 'Sign Up'}
         </h1>
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -115,7 +127,7 @@ const Login_Signup = () => {
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-red"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-black"
                 placeholder="Enter your full name"
                 autoComplete="name"
               />
@@ -128,7 +140,7 @@ const Login_Signup = () => {
               name="email"
               value={form.email}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-red"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-black"
               placeholder="Enter your email"
               autoComplete="email"
             />
@@ -141,7 +153,7 @@ const Login_Signup = () => {
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-red"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-black"
                 placeholder="Enter your phone number"
                 autoComplete="tel"
               />
@@ -154,7 +166,7 @@ const Login_Signup = () => {
               name="password"
               value={form.password}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-red"
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-black"
               placeholder="Password"
               autoComplete={isLogin ? "current-password" : "new-password"}
             />
@@ -167,7 +179,7 @@ const Login_Signup = () => {
                 name="confirmPassword"
                 value={form.confirmPassword}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-red"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-black"
                 placeholder="Confirm Password"
                 autoComplete="new-password"
               />
@@ -191,7 +203,7 @@ const Login_Signup = () => {
             {isLogin ? "Don't have an account?" : 'Already have an account?'}
           </span>
           <button
-            className="ml-2 text-brand-red hover:underline font-semibold"
+            className="ml-2 text-brand-black hover:underline font-semibold"
             onClick={() => {
               setIsLogin(!isLogin);
               setError('');

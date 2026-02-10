@@ -71,18 +71,21 @@ export const dummyApi = createApi({
       providesTags: ['Product'],
     }),
     createProduct: builder.mutation({
-      query: (productData) => ({
+      query: (formData) => ({
         url: 'products',
         method: 'POST',
-        body: productData,
+        body: formData,
+        // Don't set Content-Type - browser will set it with boundary for FormData
+        formData: true,
       }),
       invalidatesTags: ['Product'],
     }),
     updateProduct: builder.mutation({
-      query: ({ id, ...productData }) => ({
+      query: ({ id, formData }) => ({
         url: `products/${id}`,
         method: 'PUT',
-        body: productData,
+        body: formData,
+        formData: true,
       }),
       invalidatesTags: (result, error, { id }) => [{ type: 'Product', id }, 'Product'],
     }),

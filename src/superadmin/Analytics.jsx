@@ -1,5 +1,7 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, DollarSign, ShoppingCart, Package, Users } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 const Analytics = () => {
   const salesData = [
@@ -38,114 +40,122 @@ const Analytics = () => {
   return (
     <div className="space-y-6">
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {metrics.map((metric, index) => (
-          <div key={index} className="bg-white rounded-xl shadow-sm p-6">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-gray-500">{metric.label}</p>
-              <metric.icon size={20} className="text-purple-600" />
-            </div>
-            <p className="text-2xl font-bold text-gray-900">{metric.value}</p>
-            <div className="flex items-center gap-1 mt-2">
-              {metric.trend === 'up' ? (
-                <TrendingUp size={14} className="text-green-500" />
-              ) : (
-                <TrendingDown size={14} className="text-red-500" />
-              )}
-              <span className={metric.trend === 'up' ? 'text-green-500 text-sm' : 'text-red-500 text-sm'}>
-                {metric.change}
-              </span>
-            </div>
-          </div>
+          <Card key={index}>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-sm text-muted-foreground">{metric.label}</p>
+                <metric.icon className="h-5 w-5 text-muted-foreground" />
+              </div>
+              <p className="text-2xl font-bold">{metric.value}</p>
+              <div className="mt-2 flex items-center gap-1">
+                {metric.trend === 'up' ? (
+                  <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" />
+                ) : (
+                  <TrendingDown className="h-3.5 w-3.5 text-muted-foreground" />
+                )}
+                <span className="text-xs font-medium text-muted-foreground">
+                  {metric.change}
+                </span>
+              </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Revenue Chart */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Monthly Revenue</h3>
-          <div className="space-y-4">
-            {salesData.map((data, index) => (
-              <div key={index}>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-600">{data.month}</span>
-                  <span className="font-medium text-gray-900">Rs. {(data.revenue / 1000).toFixed(1)}K</span>
+        <Card>
+          <CardHeader>
+            <CardTitle>Monthly Revenue</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {salesData.map((data, index) => (
+                <div key={index}>
+                  <div className="mb-1 flex justify-between text-sm">
+                    <span className="text-muted-foreground">{data.month}</span>
+                    <span className="font-medium">Rs. {(data.revenue / 1000).toFixed(1)}K</span>
+                  </div>
+                  <div className="h-2 w-full rounded-full bg-secondary">
+                    <div
+                      className="h-2 rounded-full bg-foreground transition-all"
+                      style={{ width: `${(data.revenue / maxRevenue) * 100}%` }}
+                    />
+                  </div>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-gradient-to-r from-purple-600 to-purple-400 h-2 rounded-full transition-all"
-                    style={{ width: `${(data.revenue / maxRevenue) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Top Categories */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-6">Top Categories</h3>
-          <div className="space-y-4">
-            {topCategories.map((category, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="text-gray-700 font-medium">{category.name}</span>
-                    <span className="text-gray-900">{category.sales}</span>
+        <Card>
+          <CardHeader>
+            <CardTitle>Top Categories</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {topCategories.map((category, index) => (
+                <div key={index} className="flex items-center gap-4">
+                  <div className="flex-1">
+                    <div className="mb-1 flex justify-between text-sm">
+                      <span className="font-medium">{category.name}</span>
+                      <span>{category.sales}</span>
+                    </div>
+                    <div className="h-2 w-full rounded-full bg-secondary">
+                      <div
+                        className="h-2 rounded-full bg-foreground"
+                        style={{ width: `${category.percentage}%` }}
+                      />
+                    </div>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-gradient-to-r from-blue-600 to-blue-400 h-2 rounded-full"
-                      style={{ width: `${category.percentage}%` }}
-                    ></div>
-                  </div>
-                </div>
-                <div className="ml-4">
                   {category.trend === 'up' ? (
-                    <TrendingUp size={18} className="text-green-500" />
+                    <TrendingUp className="h-4 w-4 text-muted-foreground" />
                   ) : (
-                    <TrendingDown size={18} className="text-red-500" />
+                    <TrendingDown className="h-4 w-4 text-muted-foreground" />
                   )}
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Regional Performance */}
-      <div className="bg-white rounded-xl shadow-sm">
-        <div className="p-6 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">Regional Performance</h3>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Region</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Active Shops</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Revenue</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Growth Rate</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
+      <Card>
+        <CardHeader>
+          <CardTitle>Regional Performance</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Region</TableHead>
+                <TableHead>Active Shops</TableHead>
+                <TableHead>Total Revenue</TableHead>
+                <TableHead>Growth Rate</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {regionalData.map((region, index) => (
-                <tr key={index} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">{region.region}</td>
-                  <td className="px-6 py-4 text-sm text-gray-900">{region.shops} shops</td>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">{region.revenue}</td>
-                  <td className="px-6 py-4">
-                    <span className="inline-flex items-center gap-1 text-sm text-green-600 font-medium">
-                      <TrendingUp size={14} />
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{region.region}</TableCell>
+                  <TableCell>{region.shops} shops</TableCell>
+                  <TableCell className="font-medium">{region.revenue}</TableCell>
+                  <TableCell>
+                    <span className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground">
+                      <TrendingUp className="h-3.5 w-3.5" />
                       {region.growth}
                     </span>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 };

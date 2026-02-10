@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX } from 'react-icons/fi';
 import Logo from '../assets/Logo1.png';
 import { useSearchProductsQuery } from '../services/dummyApi';
+import { getImageUrl } from '@/lib/utils';
 
 const Header = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -94,7 +95,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-brand-red to-brand-red-dark shadow-lg fixed z-50 top-0 w-full bg-white">
+    <header className="bg-white shadow-md fixed z-50 top-0 w-full">
       <div className="container mx-auto px-4">
         <nav className="flex justify-between items-center py-4 gap-4">
           
@@ -102,7 +103,7 @@ const Header = () => {
           <Link to="/" className="flex-shrink-0" onClick={() => setMobileMenuOpen(false)}>
             <div className="flex items-center gap-3">
               <img className="h-10 w-10" src={Logo} alt="Kinmel Logo" />
-              <h2 className="hidden sm:block text-2xl md:text-3xl font-bold text-primary-foreground tracking-tight">
+              <h2 className="sm:block text-2xl md:text-3xl font-bold text-black">
                 Kinmel
               </h2>
             </div>
@@ -151,19 +152,19 @@ const Header = () => {
                   <div>
                     {data.products.map((product) => (
                       <Link 
-                        to={`/product/${product.id}`}
-                        key={product.id}
+                        to={`/product/${product._id}`}
+                        key={product._id}
                         onClick={handleProductClick}
                         className="flex items-center gap-3 w-full px-4 py-3 text-left hover:bg-accent transition-colors duration-200 border-b last:border-b-0"
                       >
                         <img 
-                          src={product.thumbnail} 
-                          alt={product.title}
+                          src={getImageUrl(product.images?.[0], 'https://via.placeholder.com/50')} 
+                          alt={product.name}
                           className="w-10 h-10 object-cover rounded-md bg-muted"
                         />
                         <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-card-foreground truncate">{product.title}</h4>
-                            <p className="text-sm text-muted-foreground">${product.price}</p>
+                            <h4 className="font-medium text-card-foreground truncate">{product.name}</h4>
+                            <p className="text-sm text-muted-foreground">Rs. {product.price}</p>
                         </div>
                       </Link>
                     ))}
@@ -177,22 +178,26 @@ const Header = () => {
 
           {/* Desktop Navigation Icons (Hidden on mobile) */}
           <div className="hidden md:flex items-center space-x-3 flex-shrink-0 gap-5">
-            {userInfo && userInfo.image ? (
-              <Link to="/account" className="p-0 m-0">
-                <img
-                  src={userInfo.image}
-                  alt="Account"
-                  className="w-8 h-8 rounded-full object-cover border-2 border-primary-foreground cursor-pointer"
-                />
+            {userInfo ? (
+              <Link to="/account" className="text-black hover:text-gray-600 transition-colors duration-300 p-2">
+                {userInfo.image ? (
+                  <img
+                    src={userInfo.image}
+                    alt="Account"
+                    className="w-8 h-8 rounded-full object-cover border-2 border-gray-300 cursor-pointer"
+                  />
+                ) : (
+                  <FiUser size={24} />
+                )}
               </Link>
             ) : (
-              <Link to="/login_Signup" className="text-primary-foreground hover:text-primary-glow transition-colors duration-300 p-2">
+              <Link to="/login_Signup" className="text-black hover:text-gray-600 transition-colors duration-300 p-2">
                 <FiUser size={24} />
               </Link>
             )}
-            <Link to="/cart" className="text-primary-foreground hover:text-primary-glow transition-colors duration-300 relative p-2">
+            <Link to="/cart" className="text-black hover:text-gray-600 transition-colors duration-300 relative p-2">
               <FiShoppingCart size={24} />
-              <span className="absolute -top-1 -right-1 bg-primary-foreground text-primary rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+              <span className="absolute -top-1 -right-1 bg-black text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
                 {cartCount}
               </span>
             </Link>
@@ -202,7 +207,7 @@ const Header = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={toggleMobileMenu}
-              className="text-primary-foreground p-2"
+              className="text-black p-2"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <FiX size={28} /> : <FiMenu size={28} />}
@@ -214,17 +219,10 @@ const Header = () => {
         {mobileMenuOpen && (
           <div ref={mobileMenuRef} className="md:hidden bg-white border-t border-border">
             <div className="flex flex-col px-4 py-3 space-y-3">
-              {userInfo && userInfo.image ? (
-                <Link to="/account" onClick={handleProductClick} className="flex items-center gap-3 p-2 rounded-md hover:bg-accent">
-                  <FiUser size={22} className="text-muted-foreground" />
-                  <span className="font-medium">My Account</span>
-                </Link>
-              ) : (
-                <Link to="/login_Signup" onClick={handleProductClick} className="flex items-center gap-3 p-2 rounded-md hover:bg-accent">
-                  <FiUser size={22} className="text-muted-foreground" />
-                  <span className="font-medium">My Account</span>
-                </Link>
-              )}
+              <Link to={userInfo ? "/account" : "/login_Signup"} onClick={handleProductClick} className="flex items-center gap-3 p-2 rounded-md hover:bg-accent">
+                <FiUser size={22} className="text-muted-foreground" />
+                <span className="font-medium">My Account</span>
+              </Link>
               <Link to="/cart" onClick={handleProductClick} className="flex items-center gap-3 p-2 rounded-md hover:bg-accent">
                 <FiShoppingCart size={22} className="text-muted-foreground" />
                 <span className="font-medium">Shopping Cart</span>

@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { Save, Globe, Mail, Bell, Shield, Database, Zap } from 'lucide-react';
+import { Save, Globe, Bell, Shield, Database, Zap } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const SystemSettings = () => {
-  const [activeTab, setActiveTab] = useState('general');
   const [settings, setSettings] = useState({
     platformName: 'Kinmel Marketplace',
     platformEmail: 'admin@kinmel.com',
@@ -17,14 +24,6 @@ const SystemSettings = () => {
     smsNotifications: false,
   });
 
-  const tabs = [
-    { id: 'general', label: 'General', icon: Globe },
-    { id: 'commerce', label: 'Commerce', icon: Zap },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'security', label: 'Security', icon: Shield },
-    { id: 'database', label: 'Database', icon: Database },
-  ];
-
   const handleSave = (e) => {
     e.preventDefault();
     alert('System settings saved successfully!');
@@ -32,224 +31,203 @@ const SystemSettings = () => {
 
   return (
     <div className="space-y-6">
-      {/* Tabs */}
-      <div className="bg-white rounded-xl shadow-sm">
-        <div className="border-b border-gray-200">
-          <nav className="flex overflow-x-auto">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-                  activeTab === tab.id
-                    ? 'border-purple-600 text-purple-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <tab.icon size={18} />
-                {tab.label}
-              </button>
-            ))}
-          </nav>
-        </div>
+      <Tabs defaultValue="general" className="space-y-6">
+        <Card>
+          <CardContent className="p-1">
+            <TabsList className="w-full justify-start h-auto p-1 gap-1">
+              <TabsTrigger value="general" className="gap-2 px-4 py-2">
+                <Globe className="h-4 w-4" /> General
+              </TabsTrigger>
+              <TabsTrigger value="commerce" className="gap-2 px-4 py-2">
+                <Zap className="h-4 w-4" /> Commerce
+              </TabsTrigger>
+              <TabsTrigger value="notifications" className="gap-2 px-4 py-2">
+                <Bell className="h-4 w-4" /> Notifications
+              </TabsTrigger>
+              <TabsTrigger value="security" className="gap-2 px-4 py-2">
+                <Shield className="h-4 w-4" /> Security
+              </TabsTrigger>
+              <TabsTrigger value="database" className="gap-2 px-4 py-2">
+                <Database className="h-4 w-4" /> Database
+              </TabsTrigger>
+            </TabsList>
+          </CardContent>
+        </Card>
 
-        <div className="p-6">
-          <form onSubmit={handleSave}>
-            {/* General Settings */}
-            {activeTab === 'general' && (
-              <div className="space-y-6 max-w-2xl">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Platform Name</label>
-                  <input
-                    type="text"
-                    value={settings.platformName}
-                    onChange={(e) => setSettings({ ...settings, platformName: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Platform Email</label>
-                  <input
-                    type="email"
-                    value={settings.platformEmail}
-                    onChange={(e) => setSettings({ ...settings, platformEmail: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Support Email</label>
-                  <input
-                    type="email"
-                    value={settings.supportEmail}
-                    onChange={(e) => setSettings({ ...settings, supportEmail: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-                <div className="pt-4">
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
+        <form onSubmit={handleSave}>
+          {/* General Settings */}
+          <TabsContent value="general">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="max-w-2xl space-y-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="platformName">Platform Name</Label>
+                    <Input id="platformName" value={settings.platformName} onChange={(e) => setSettings({ ...settings, platformName: e.target.value })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="platformEmail">Platform Email</Label>
+                    <Input id="platformEmail" type="email" value={settings.platformEmail} onChange={(e) => setSettings({ ...settings, platformEmail: e.target.value })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="supportEmail">Support Email</Label>
+                    <Input id="supportEmail" type="email" value={settings.supportEmail} onChange={(e) => setSettings({ ...settings, supportEmail: e.target.value })} />
+                  </div>
+                  <div className="flex items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <p className="font-medium">Maintenance Mode</p>
+                      <p className="text-sm text-muted-foreground">Enable to make the platform unavailable to users</p>
+                    </div>
+                    <Switch
                       checked={settings.maintenanceMode}
-                      onChange={(e) => setSettings({ ...settings, maintenanceMode: e.target.checked })}
-                      className="w-4 h-4 text-purple-600 rounded"
+                      onCheckedChange={(checked) => setSettings({ ...settings, maintenanceMode: checked })}
                     />
-                    <span className="text-sm font-medium text-gray-700">Maintenance Mode</span>
-                  </label>
-                  <p className="text-xs text-gray-500 ml-7">Enable to make the platform unavailable to users</p>
+                  </div>
+                  <Button type="submit" className="gap-2">
+                    <Save className="h-4 w-4" /> Save Changes
+                  </Button>
                 </div>
-              </div>
-            )}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-            {/* Commerce Settings */}
-            {activeTab === 'commerce' && (
-              <div className="space-y-6 max-w-2xl">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Commission Rate (%)</label>
-                    <input
-                      type="number"
-                      value={settings.commissionRate}
-                      onChange={(e) => setSettings({ ...settings, commissionRate: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">Platform commission on each sale</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Tax Rate (%)</label>
-                    <input
-                      type="number"
-                      value={settings.taxRate}
-                      onChange={(e) => setSettings({ ...settings, taxRate: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Min Order Amount (Rs.)</label>
-                    <input
-                      type="number"
-                      value={settings.minOrderAmount}
-                      onChange={(e) => setSettings({ ...settings, minOrderAmount: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-3 pt-4">
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={settings.enableRegistration}
-                      onChange={(e) => setSettings({ ...settings, enableRegistration: e.target.checked })}
-                      className="w-4 h-4 text-purple-600 rounded"
-                    />
-                    <span className="text-sm font-medium text-gray-700">Allow New Shop Registration</span>
-                  </label>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={settings.requireApproval}
-                      onChange={(e) => setSettings({ ...settings, requireApproval: e.target.checked })}
-                      className="w-4 h-4 text-purple-600 rounded"
-                    />
-                    <span className="text-sm font-medium text-gray-700">Require Admin Approval for New Shops</span>
-                  </label>
-                </div>
-              </div>
-            )}
-
-            {/* Notification Settings */}
-            {activeTab === 'notifications' && (
-              <div className="space-y-6 max-w-2xl">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                    <div>
-                      <p className="font-medium text-gray-900">Email Notifications</p>
-                      <p className="text-sm text-gray-500">Send email notifications for important events</p>
+          {/* Commerce Settings */}
+          <TabsContent value="commerce">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="max-w-2xl space-y-6">
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="commissionRate">Commission Rate (%)</Label>
+                      <Input id="commissionRate" type="number" value={settings.commissionRate} onChange={(e) => setSettings({ ...settings, commissionRate: e.target.value })} />
+                      <p className="text-xs text-muted-foreground">Platform commission on each sale</p>
                     </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={settings.emailNotifications}
-                        onChange={(e) => setSettings({ ...settings, emailNotifications: e.target.checked })}
-                        className="sr-only peer"
+                    <div className="space-y-2">
+                      <Label htmlFor="taxRate">Tax Rate (%)</Label>
+                      <Input id="taxRate" type="number" value={settings.taxRate} onChange={(e) => setSettings({ ...settings, taxRate: e.target.value })} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="minOrderAmount">Min Order Amount (Rs.)</Label>
+                      <Input id="minOrderAmount" type="number" value={settings.minOrderAmount} onChange={(e) => setSettings({ ...settings, minOrderAmount: e.target.value })} />
+                    </div>
+                  </div>
+                  <div className="space-y-3 pt-2">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <Checkbox
+                        checked={settings.enableRegistration}
+                        onCheckedChange={(checked) => setSettings({ ...settings, enableRegistration: checked })}
                       />
-                      <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                      <span className="text-sm font-medium">Allow New Shop Registration</span>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <Checkbox
+                        checked={settings.requireApproval}
+                        onCheckedChange={(checked) => setSettings({ ...settings, requireApproval: checked })}
+                      />
+                      <span className="text-sm font-medium">Require Admin Approval for New Shops</span>
                     </label>
                   </div>
-                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                    <div>
-                      <p className="font-medium text-gray-900">SMS Notifications</p>
-                      <p className="text-sm text-gray-500">Send SMS for critical alerts</p>
+                  <Button type="submit" className="gap-2">
+                    <Save className="h-4 w-4" /> Save Changes
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Notification Settings */}
+          <TabsContent value="notifications">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="max-w-2xl space-y-4">
+                  <div className="flex items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <p className="font-medium">Email Notifications</p>
+                      <p className="text-sm text-muted-foreground">Send email notifications for important events</p>
                     </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={settings.smsNotifications}
-                        onChange={(e) => setSettings({ ...settings, smsNotifications: e.target.checked })}
-                        className="sr-only peer"
-                      />
-                      <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
-                    </label>
+                    <Switch
+                      checked={settings.emailNotifications}
+                      onCheckedChange={(checked) => setSettings({ ...settings, emailNotifications: checked })}
+                    />
                   </div>
+                  <div className="flex items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <p className="font-medium">SMS Notifications</p>
+                      <p className="text-sm text-muted-foreground">Send SMS for critical alerts</p>
+                    </div>
+                    <Switch
+                      checked={settings.smsNotifications}
+                      onCheckedChange={(checked) => setSettings({ ...settings, smsNotifications: checked })}
+                    />
+                  </div>
+                  <Button type="submit" className="gap-2">
+                    <Save className="h-4 w-4" /> Save Changes
+                  </Button>
                 </div>
-              </div>
-            )}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-            {/* Security Settings */}
-            {activeTab === 'security' && (
-              <div className="space-y-6 max-w-2xl">
-                <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
-                  <h4 className="font-medium text-purple-900 mb-2">Two-Factor Authentication</h4>
-                  <p className="text-sm text-purple-700 mb-4">Add an extra layer of security to super admin accounts</p>
-                  <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-                    Enable 2FA
-                  </button>
+          {/* Security Settings */}
+          <TabsContent value="security">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="max-w-2xl space-y-6">
+                  <div className="rounded-lg border p-4">
+                    <h4 className="font-medium">Two-Factor Authentication</h4>
+                    <p className="mt-1 text-sm text-muted-foreground">Add an extra layer of security to super admin accounts</p>
+                    <Button className="mt-4">Enable 2FA</Button>
+                  </div>
+                  <div className="space-y-2 rounded-lg border p-4">
+                    <Label>Session Timeout</Label>
+                    <Select defaultValue="30">
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="15">15 minutes</SelectItem>
+                        <SelectItem value="30">30 minutes</SelectItem>
+                        <SelectItem value="60">1 hour</SelectItem>
+                        <SelectItem value="120">2 hours</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button type="submit" className="gap-2">
+                    <Save className="h-4 w-4" /> Save Changes
+                  </Button>
                 </div>
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <h4 className="font-medium text-gray-900 mb-2">Session Timeout</h4>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
-                    <option>15 minutes</option>
-                    <option>30 minutes</option>
-                    <option>1 hour</option>
-                    <option>2 hours</option>
-                  </select>
-                </div>
-              </div>
-            )}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-            {/* Database Settings */}
-            {activeTab === 'database' && (
-              <div className="space-y-6 max-w-2xl">
-                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <h4 className="font-medium text-blue-900 mb-2">Database Backup</h4>
-                  <p className="text-sm text-blue-700 mb-4">Last backup: January 27, 2026 at 2:30 AM</p>
-                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                    Backup Now
-                  </button>
+          {/* Database Settings */}
+          <TabsContent value="database">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="max-w-2xl space-y-6">
+                  <div className="rounded-lg border p-4">
+                    <h4 className="font-medium">Database Backup</h4>
+                    <p className="mt-1 text-sm text-muted-foreground">Last backup: January 27, 2026 at 2:30 AM</p>
+                    <Button className="mt-4" variant="outline">Backup Now</Button>
+                  </div>
+                  <div className="space-y-2 rounded-lg border p-4">
+                    <Label>Auto Backup Schedule</Label>
+                    <Select defaultValue="daily">
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="daily">Daily at 2:00 AM</SelectItem>
+                        <SelectItem value="12hours">Every 12 hours</SelectItem>
+                        <SelectItem value="weekly">Weekly</SelectItem>
+                        <SelectItem value="monthly">Monthly</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button type="submit" className="gap-2">
+                    <Save className="h-4 w-4" /> Save Changes
+                  </Button>
                 </div>
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <h4 className="font-medium text-gray-900 mb-2">Auto Backup Schedule</h4>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
-                    <option>Daily at 2:00 AM</option>
-                    <option>Every 12 hours</option>
-                    <option>Weekly</option>
-                    <option>Monthly</option>
-                  </select>
-                </div>
-              </div>
-            )}
-
-            <div className="pt-6">
-              <button
-                type="submit"
-                className="flex items-center gap-2 bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors"
-              >
-                <Save size={18} />
-                Save Changes
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </form>
+      </Tabs>
     </div>
   );
 };

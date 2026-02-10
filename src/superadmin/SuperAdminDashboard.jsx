@@ -1,56 +1,17 @@
 import React from 'react';
 import { Store, Users, Package, DollarSign, TrendingUp, Activity, ShoppingBag } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 const SuperAdminDashboard = () => {
   const stats = [
-    { 
-      label: 'Total Shops', 
-      value: '24', 
-      change: '+3 this month', 
-      trend: 'up',
-      icon: Store,
-      color: 'bg-blue-500'
-    },
-    { 
-      label: 'Total Shopkeepers', 
-      value: '32', 
-      change: '+5 this month', 
-      trend: 'up',
-      icon: Users,
-      color: 'bg-green-500'
-    },
-    { 
-      label: 'All Products', 
-      value: '2,458', 
-      change: '+156 this week', 
-      trend: 'up',
-      icon: Package,
-      color: 'bg-purple-500'
-    },
-    { 
-      label: 'Total Revenue', 
-      value: 'Rs. 12.5L', 
-      change: '+18.2%', 
-      trend: 'up',
-      icon: DollarSign,
-      color: 'bg-yellow-500'
-    },
-    { 
-      label: 'Active Orders', 
-      value: '543', 
-      change: '+28 today', 
-      trend: 'up',
-      icon: ShoppingBag,
-      color: 'bg-orange-500'
-    },
-    { 
-      label: 'Platform Users', 
-      value: '15,234', 
-      change: '+234 this week', 
-      trend: 'up',
-      icon: Activity,
-      color: 'bg-pink-500'
-    },
+    { label: 'Total Shops', value: '24', change: '+3 this month', icon: Store },
+    { label: 'Total Shopkeepers', value: '32', change: '+5 this month', icon: Users },
+    { label: 'All Products', value: '2,458', change: '+156 this week', icon: Package },
+    { label: 'Total Revenue', value: 'Rs. 12.5L', change: '+18.2%', icon: DollarSign },
+    { label: 'Active Orders', value: '543', change: '+28 today', icon: ShoppingBag },
+    { label: 'Platform Users', value: '15,234', change: '+234 this week', icon: Activity },
   ];
 
   const topShops = [
@@ -71,101 +32,103 @@ const SuperAdminDashboard = () => {
 
   const getActivityIcon = (type) => {
     switch (type) {
-      case 'shop': return <Store size={16} className="text-blue-500" />;
-      case 'product': return <Package size={16} className="text-purple-500" />;
-      case 'order': return <ShoppingBag size={16} className="text-orange-500" />;
-      case 'user': return <Users size={16} className="text-green-500" />;
-      case 'payment': return <DollarSign size={16} className="text-yellow-500" />;
-      default: return <Activity size={16} />;
+      case 'shop': return <Store className="h-4 w-4 text-foreground" />;
+      case 'product': return <Package className="h-4 w-4 text-foreground" />;
+      case 'order': return <ShoppingBag className="h-4 w-4 text-foreground" />;
+      case 'user': return <Users className="h-4 w-4 text-foreground" />;
+      case 'payment': return <DollarSign className="h-4 w-4 text-foreground" />;
+      default: return <Activity className="h-4 w-4" />;
     }
   };
 
   return (
     <div className="space-y-6">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {stats.map((stat, index) => (
-          <div key={index} className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-sm text-gray-500 mb-1">{stat.label}</p>
-                <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
-                <div className="flex items-center gap-1 mt-2">
-                  <TrendingUp size={14} className="text-green-500" />
-                  <span className="text-green-500 text-sm font-medium">{stat.change}</span>
+          <Card key={index} className="hover:shadow-md transition-shadow">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex-1 space-y-1">
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
+                  <p className="text-3xl font-bold">{stat.value}</p>
+                  <div className="flex items-center gap-1">
+                    <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" />
+                    <span className="text-xs font-medium text-muted-foreground">{stat.change}</span>
+                  </div>
+                </div>
+                <div className="rounded-xl p-3.5 bg-muted text-foreground">
+                  <stat.icon className="h-6 w-6" />
                 </div>
               </div>
-              <div className={`${stat.color} p-4 rounded-xl`}>
-                <stat.icon size={28} className="text-white" />
-              </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Top Performing Shops */}
-        <div className="lg:col-span-2 bg-white rounded-xl shadow-sm">
-          <div className="p-6 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Top Performing Shops</h3>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Shop</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Products</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Orders</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Revenue</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>Top Performing Shops</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Shop</TableHead>
+                  <TableHead>Products</TableHead>
+                  <TableHead>Orders</TableHead>
+                  <TableHead>Revenue</TableHead>
+                  <TableHead>Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {topShops.map((shop) => (
-                  <tr key={shop.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4">
+                  <TableRow key={shop.id}>
+                    <TableCell>
                       <div>
-                        <div className="font-medium text-gray-900">{shop.name}</div>
-                        <div className="text-sm text-gray-500">{shop.owner}</div>
+                        <div className="font-medium">{shop.name}</div>
+                        <div className="text-sm text-muted-foreground">{shop.owner}</div>
                       </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">{shop.products}</td>
-                    <td className="px-6 py-4 text-sm text-gray-900">{shop.orders}</td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{shop.revenue}</td>
-                    <td className="px-6 py-4">
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        shop.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                      }`}>
+                    </TableCell>
+                    <TableCell>{shop.products}</TableCell>
+                    <TableCell>{shop.orders}</TableCell>
+                    <TableCell className="font-medium">{shop.revenue}</TableCell>
+                    <TableCell>
+                      <Badge variant={shop.status === 'Active' ? 'default' : 'outline'}>
                         {shop.status}
-                      </span>
-                    </td>
-                  </tr>
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
 
         {/* Recent Activities */}
-        <div className="bg-white rounded-xl shadow-sm">
-          <div className="p-6 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Recent Activities</h3>
-          </div>
-          <div className="p-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Activities</CardTitle>
+          </CardHeader>
+          <CardContent>
             <div className="space-y-4">
               {recentActivities.map((activity) => (
                 <div key={activity.id} className="flex items-start gap-3">
-                  <div className="mt-1">{getActivityIcon(activity.type)}</div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">{activity.action}</p>
-                    <p className="text-sm text-gray-500">{activity.shop}</p>
-                    <p className="text-xs text-gray-400 mt-1">{activity.time}</p>
+                  <div className="mt-0.5 rounded-full bg-muted p-1.5">
+                    {getActivityIcon(activity.type)}
+                  </div>
+                  <div className="flex-1 space-y-0.5">
+                    <p className="text-sm font-medium">{activity.action}</p>
+                    <p className="text-sm text-muted-foreground">{activity.shop}</p>
+                    <p className="text-xs text-muted-foreground">{activity.time}</p>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
